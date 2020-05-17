@@ -1,5 +1,9 @@
 package org.launchcode.techjobs_oo;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Job {
@@ -46,6 +50,75 @@ public class Job {
         return Objects.hash(getId());
     }
 
+    @Override
+    public String toString() {
+
+        String blankLine = System.lineSeparator();
+        StringBuilder formattedProperly = new StringBuilder(blankLine);
+        HashMap<String, String> jobParser = new LinkedHashMap<>();
+        int emptyFieldCounter = 0;
+        String emptyFieldString = "Data not available";
+        String jobDoesNotExist = "OOPS! This job does not seem to exist.";
+
+
+        try {
+            jobParser.put("ID: ", String.valueOf(this.getId()));
+        }
+        catch (NullPointerException e) {
+            jobParser.put("ID: ", emptyFieldString);
+            emptyFieldCounter++;
+        }
+        try {
+            jobParser.put("Name: ", this.getName());
+        }
+        catch (NullPointerException e) {
+            jobParser.put("Name: ", emptyFieldString);
+            emptyFieldCounter++;
+        }
+        try {
+            jobParser.put("Employer: ", this.getEmployer().getValue());
+        }
+        catch (NullPointerException e) {
+            jobParser.put("Employer: ", emptyFieldString);
+            emptyFieldCounter++;
+        }
+        try {
+            jobParser.put("Location: ", this.getLocation().getValue());
+        }
+        catch (NullPointerException e) {
+            jobParser.put("Location: ", emptyFieldString);
+            emptyFieldCounter++;
+        }
+        try {
+            jobParser.put("Position Type: ", this.getPositionType().getValue());
+        }
+        catch (NullPointerException e) {
+            jobParser.put("Position Type: ", emptyFieldString);
+            emptyFieldCounter++;
+        }
+        try {
+            jobParser.put("Core Competency: ", this.getCoreCompetency().getValue());
+        }
+        catch (NullPointerException e) {
+            jobParser.put("Core Competency: ", emptyFieldString);
+            emptyFieldCounter++;
+        }
+        finally {
+            if (emptyFieldCounter == (jobParser.size() - 2)) {
+                return formattedProperly + jobDoesNotExist;
+            }
+        }
+
+        for (Map.Entry<String, String> job : jobParser.entrySet()) {
+            if (job.getValue() == null) {
+                formattedProperly.append(job.getKey()).append(emptyFieldString).append(blankLine);
+            } else {
+                formattedProperly.append(job.getKey()).append(job.getValue()).append(blankLine);
+            }
+        }
+
+        return formattedProperly.toString();
+    }
 
     // TODO: Add getters for each field EXCEPT nextId. Add setters for each field EXCEPT nextID
     //  and id.
