@@ -17,10 +17,6 @@ public class Job {
     private PositionType positionType;
     private CoreCompetency coreCompetency;
 
-    // TODO: Add two constructors - one to initialize a unique ID and a second to initialize the
-    //  other five fields. The second constructor should also call the first in order to initialize
-    //  the 'id' field.
-
     public Job() {
         id = nextId;
         nextId++;
@@ -34,8 +30,6 @@ public class Job {
         this.positionType = positionType;
         this.coreCompetency = coreCompetency;
     }
-    // TODO: Add custom equals and hashCode methods. Consider two Job objects "equal" when their id fields
-    //  match.
 
     @Override
     public boolean equals(Object o) {
@@ -58,18 +52,16 @@ public class Job {
         HashMap<String, String> jobParser = new LinkedHashMap<>();
         int emptyFieldCounter = 0;
         String emptyFieldString = "Data not available";
-        String jobDoesNotExist = "OOPS! This job does not seem to exist.";
-
+        String jobDoesNotExist = blankLine + "OOPS! This job does not seem to exist.";
 
         try {
             jobParser.put("ID: ", String.valueOf(this.getId()));
         }
         catch (NullPointerException e) {
-            jobParser.put("ID: ", emptyFieldString);
-            emptyFieldCounter++;
+            return formattedProperly + jobDoesNotExist;
         }
         try {
-            jobParser.put("Name: ", this.getName());
+                jobParser.put("Name: ", this.getName());
         }
         catch (NullPointerException e) {
             jobParser.put("Name: ", emptyFieldString);
@@ -90,7 +82,12 @@ public class Job {
             emptyFieldCounter++;
         }
         try {
-            jobParser.put("Position Type: ", this.getPositionType().getValue());
+            if (this.getPositionType().getValue().equals("")) {
+                jobParser.put("Position Type: ", emptyFieldString);
+                emptyFieldCounter++;
+            } else {
+                jobParser.put("Position Type: ", this.getPositionType().getValue());
+            }
         }
         catch (NullPointerException e) {
             jobParser.put("Position Type: ", emptyFieldString);
@@ -104,25 +101,25 @@ public class Job {
             emptyFieldCounter++;
         }
         finally {
-            if (emptyFieldCounter == (jobParser.size() - 2)) {
-                return formattedProperly + jobDoesNotExist;
+            if (emptyFieldCounter == (jobParser.size() - 1)) {
+                return jobDoesNotExist;
             }
         }
 
         for (Map.Entry<String, String> job : jobParser.entrySet()) {
-            if (job.getValue() == null) {
+            if (job.getValue() == null  || job.getValue().equals("")) {
                 formattedProperly.append(job.getKey()).append(emptyFieldString).append(blankLine);
+                emptyFieldCounter++;
             } else {
                 formattedProperly.append(job.getKey()).append(job.getValue()).append(blankLine);
             }
         }
-
-        return formattedProperly.toString();
+        if (emptyFieldCounter == (jobParser.size() - 1)) {
+            return jobDoesNotExist;
+        } else {
+            return formattedProperly.toString();
+        }
     }
-
-    // TODO: Add getters for each field EXCEPT nextId. Add setters for each field EXCEPT nextID
-    //  and id.
-
 
     public String getName() {
         return name;

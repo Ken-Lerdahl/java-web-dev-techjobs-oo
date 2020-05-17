@@ -47,7 +47,6 @@ public class JobTest {
         assertFalse(jobA.equals(jobBIdenticalToJobA));
     }
 
-    //TODO: Test toString on job, creates blank line before and after job info
     @Test
     public void testToStringForBlankLines() {
         String blankLine = "\n";
@@ -55,24 +54,28 @@ public class JobTest {
         assertEquals(blankLine.toCharArray()[0], newJobToTestBlankLines.toString().toCharArray()[0]);
     }
 
-    //TODO: Test toString on job, contains label for each job, followed by the data stored
     @Test
     public void testForLabelsAndData() {
         Job jobToTestLabelsAndData = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence")) ;
         assertTrue(jobToTestLabelsAndData.toString().contains("Name: Product tester\nEmployer: ACME\nLocation: Desert\nPosition Type: Quality control\nCore Competency: Persistence\n"));
     }
 
-    //TODO: Test toString on job, if field is empty, prints "Data not available" after label;
     @Test
     public void testLabelLeftBlankInInitialization() {
         Job jobToTestBlankLabel = new Job("Paper Salesman", new Employer("Dunder Mifflin"), new Location("Scranton"), new PositionType(), new CoreCompetency("Jello Molds"));
         assertTrue(jobToTestBlankLabel.toString().contains("Position Type: Data not available"));
     }
 
-    //TODO: Test toString on job, if Job only contains ID, returns "OOPS! This job does not seem to exist."
     @Test
     public void testJobWithZeroArgs() {
         Job blankJobNoArgs = new Job();
         assertEquals("\nOOPS! This job does not seem to exist.", blankJobNoArgs.toString());
+    }
+
+    @Test
+    public void testJobWithAllEmptyStrings() {
+        Job emptyStringsTestJob = new Job("", new Employer(""), new Location(""), new PositionType(""), new CoreCompetency(""));
+        assertEquals("\nOOPS! This job does not seem to exist.", emptyStringsTestJob.toString());
+
     }
 }
